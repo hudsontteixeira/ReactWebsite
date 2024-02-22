@@ -2,7 +2,7 @@ const express = require('express');
 const pg = require("pg");
 const app = express();
 
-var conString = 'postgres://postgres:6268@localhost:5433/tp1';
+var conString = 'postgres://prweb:prweb@localhost:5432/prweb_react';
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
