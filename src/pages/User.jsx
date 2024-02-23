@@ -1,5 +1,36 @@
-import { useState } from "react";
+import React,{ useState } from "react";
+import {UserContext} from '../context/userContext';
+import { postServiceData } from "../api/util";
+import {Navigate} from "react-router-dom";
 function User(props) {
+    const {userData} = React.useContext(UserContext);
+    const [dataSaved,setDataSaved] = useState(false);  
+    const [birthdate,setBirthdate] = useState(userData.person_birthdate);
+    const [firstName,setFirstName] = useState(userData.person_firstname);
+    const [lastName,setLastName] = useState(userData.person_lastname);
+    const [pass,setPass] = useState("");
+
+    const birthDateTrype = new Date(userData.person_birthdate);
+    const handleSubimit = (e) => {
+        e.preventDefault();
+        userData.person_id != -1 ? 
+            postServiceData("updateUser", {
+                person_firstname: firstName,
+                person_lastname: lastName,
+                person_birthdate: `${birthdate}T00:00:00.000Z`,
+                id: userData.person_id
+            })
+            .then((data)=>{console.log(data);setDataSaved(data);})
+        : postServiceData("createUser", {
+            person_firstname: firstName,
+            person_lastname: lastName,
+            person_birthdate: `${birthdate}T00:00:00.000Z`,
+            password: pass,
+        })
+        .then((data)=>{console.log("createdUser",data);setDataSaved(data);})
+
+    }
+    if(dataSaved.ok === 1){return <Navigate to="/users" />;}
     return (
         <>
         <div className="py-3">
@@ -7,33 +38,48 @@ function User(props) {
                 <div className="row">
                     <div className="col-md-12">
                         <h2 >Create / Edit User page</h2>
+                        {JSON.stringify(userData.person_birthdate)}
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-md-12">
                         <div className="table-responsive">
-                            <form action="saveuser.do" method="POST">
+                            <form onSubmit={handleSubimit} method="POST">
                                 <table className="table table-striped">
                                     <tbody>
                                         <tr>
                                             <th scope="col">user #</th>
                                             <td>
-                                                    <input type="hidden" name="id" value="-1" />
-                                                    <input type="hidden" name="id" value="${user.personId}" />
+                                                    <p name="id">{userData.person_id != -1 && userData.person_id}</p>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th scope="col">FirstName</th>
-                                            <td><input type="text" className="form-control" name="FirstName" value="${user.personFirstname}" /></td>
+                                            <td><input type="text" className="form-control" name="FirstName" value={firstName} onChange={(e)=>{setFirstName(e.target.value)}}/></td>
                                         </tr>
                                         <tr>
                                             <th scope="col">LastName</th>
-                                            <td><input type="text" className="form-control" name="LastName" value="${user.personLastname}" /></td>
+                                            <td><input type="text" className="form-control" name="LastName" value={lastName} onChange={(e)=>{setLastName(e.target.value)}} /></td>
                                         </tr>
                                         <tr>
                                             <th scope="col">Birthdate</th>
-                                            <td><input type="date" className="form-control" name="Birthdate" value="${user.personBirthdate}"/></td>
+                                            <td><input type="text" 
+                                            className="form-control" 
+                                            name="Birthdate" 
+                                            onFocus={(e)=>{e.target.type='date'}}
+                                            onBlur={(e)=>{e.target.type='text'}}
+                                            onChange={(e)=>{setBirthdate(e.target.value)}}
+                                            placeholder={`${birthDateTrype.getDay()}/${birthDateTrype.getMonth()}/${birthDateTrype.getFullYear()}`} /></td>
                                         </tr>
+                                       {userData.person_id === -1 && 
+                                        <tr>
+                                            <th scope="col">Password</th>
+                                            <td><input type="password" 
+                                            className="form-control" 
+                                            name="Password" 
+                                            value={pass} 
+                                            onChange={(e)=>{setPass(e.target.value)}} /></td>
+                                        </tr>}
                                     </tbody>
                                     <tfoot>
                                         <tr>

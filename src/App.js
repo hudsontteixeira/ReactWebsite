@@ -1,8 +1,11 @@
 import logo from './logo.svg';
 import './App.css';
 import Login from './pages/Login';
-import Users from './pages/Users'
+import Users from './pages/Users';
+import User from './pages/User';
+
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
+import {UserProvider} from './context/userContext'
 function setToken (userToken){
   sessionStorage.setItem('token',JSON.stringify(userToken))
 }
@@ -18,12 +21,15 @@ function removeToken(){
 function App() {
   return (
     <div>
-      <Router>
-        <Routes>
-          <Route path='/' element={<Login removeToken={removeToken} setToken={setToken} />}/>
-          <Route path='/users' element={<Users getToken={getToken} />}/>
-        </Routes>
-      </Router>
+      <UserProvider>
+        <Router>
+          <Routes>
+            <Route path='/' element={<Login removeToken={removeToken} setToken={setToken} />}/>
+            <Route path='/users' element={<Users getToken={getToken} />}/>
+            <Route path='/user' element={<User getToken={getToken} />}/>
+          </Routes>
+        </Router>
+      </UserProvider>
     </div>
   );
 }

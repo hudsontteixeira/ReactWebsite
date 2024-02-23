@@ -1,10 +1,30 @@
-import { useState } from "react";
+import React,{useEffect,useState} from "react";
 import {Navigate} from "react-router-dom"
+import { postServiceData } from '../api/util';
+import {UsersInList} from "../components/UsersInList";
+import {UserContext} from '../context/userContext';
+
 function Users(props) {
+    const [users, setUsers] = useState([]);
+    const [wantToEdit, setWantToEdit] = useState(false); 
+    const {userData,setUserData} = React.useContext(UserContext);  
+    useEffect(()=>{
+        postServiceData("users", {})
+            .then((data)=>{setUsers(data)})
+    },[])
+    function handleAddUser(){
+        setUserData({person_id:-1,person_firstname:"",person_lastname:"",person_birthdate:""});
+        setWantToEdit(true);
+
+    }
     const token = props.getToken();
     if(!token){
         return(<Navigate to="/" />)
     }
+    if (wantToEdit) {
+        return <Navigate push to="/user" />;
+    }
+
     return (
         <>
         <div class="py-3">
@@ -28,27 +48,15 @@ function Users(props) {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                        <tr>
-                                            <td scope="col">{"item.personId"}</td>
-                                            <td>{"item.personFirstname"}</td>
-                                            <td>{"item.personLastname"}</td>
-                                            <td>{"item.personBirthdate"}</td>
-                                            <td class="text-center">
-                                                <form action="editUser" method="POST">
-                                                    <input type="hidden" name="id" value="${item.personId}" />
-                                                    <button name="edit" class="btn" formaction="edituser.do"><img src="img/edit.png" alt="edit" class="icon" /></button>
-                                                    <button name="delete" class="btn" formaction="deleteuser.do"><img src="img/delete.png" alt="delete" class="icon" /></button>
-                                                </form>
-                                            </td>
-                                        </tr>
+                                    {users.map((item) => (
+                                        <UsersInList item={item} setWantToEdit={setWantToEdit} key={item.personId}  />
+                                    ))}
                                 </tbody>
                                 <tfoot>
                                     <tr id="addNew">
                                         <td scope="col" colspan="4"></td>
                                         <td class="text-center">
-                                            <form action="createuser.do" method="POST">
-                                                <button class="btn"><img src="img/plus.png" alt="add" class="icon" /></button>
-                                            </form>
+                                            <button class="btn"><img src="img/plus.png" alt="add" onClick={handleAddUser} class="icon" /></button>
                                         </td>
                                     </tr>
                                 </tfoot>

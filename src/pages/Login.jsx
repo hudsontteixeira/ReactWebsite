@@ -1,5 +1,6 @@
 import { useState } from "react";
 import {Navigate} from "react-router-dom"
+import { postServiceData } from '../api/util';
 function Login(props) {
     const [canLogin, setCanLogin] = useState(false);
     const [login, setLogin] = useState("");
@@ -10,7 +11,15 @@ function Login(props) {
         console.log(login,password)
     }
     props.removeToken();
-    
+    function checkLogin(e){
+        e.preventDefault();
+        const paramBody = {login:login, passwd:password}
+        postServiceData("authenticate",paramBody).then((data)=>{
+            if(data.ok === 1){
+                setCanLogin(true)
+            }
+        })
+    }
     if (canLogin) {
         props.setToken("loggedIn");
         return <Navigate push to="/users" />;
@@ -27,7 +36,7 @@ function Login(props) {
                         </div>
                         <div className="row">
                             <div className="col-md-12">
-                                <form id="c_form-h" action="login.do" method="POST" onSubmit={handleSubmit}>
+                                <form id="c_form-h" action="login.do" method="POST" onSubmit={checkLogin}>
                                     <div className="form-group row">
                                         <label for="inputlogin" className="col-2 col-form-label">Login</label>
                                         <div className="col-10">
