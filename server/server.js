@@ -129,6 +129,40 @@ app.post("/deleteUser", function (req,res){
   values.push(req.body.id);
   postSQLResult(req,res,sqlRequest,values)
   });
+
+//Books List
+app.post("/books", function (req,res){
+var sqlRequest = "SELECT * FROM book";
+var values = [];
+getSQLResult(req,res,sqlRequest,values)
+});
+
+//Book Update
+app.post("/updateBook", function (req,res){
+  var sqlRequest = `UPDATE book SET book_title = $1, book_authors = $2 WHERE book_id = $3; `;
+  var values = [];
+  values.push(req.body.book_title);
+  values.push(req.body.book_authors);
+  values.push(req.body.id);
+  postSQLResult(req,res,sqlRequest,values)
+  });
+
+//Book create
+app.post("/createBook", function (req,res){
+  var sqlRequest = "INSERT INTO book(book_title, book_authors) VALUES($1,$2) RETURNING book_id;";
+  var values = [];
+  values.push(req.body.book_title);
+  values.push(req.body.book_authors);
+  postSQLResult(req,res,sqlRequest,values)
+  });
+
+//Book delete
+app.post("/deleteBook", function (req,res){
+  var sqlRequest = `Delete from book WHERE person_id = $1; `;
+  var values = [];
+  values.push(req.body.id);
+  postSQLResult(req,res,sqlRequest,values)
+  });
 // Must be LAST instruction of the file
 // Listen to port 8000
 app.listen(8000, () => {
