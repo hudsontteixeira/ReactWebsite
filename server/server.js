@@ -79,6 +79,7 @@ function postSQLResult(req,res,sqlRequest,values){
     }
   })
 }
+
 app.post("/authenticate", function (req,res){
   var login = req.body.login;
   var passwd = req.body.passwd;
@@ -118,6 +119,14 @@ app.post("/createUser", function (req,res){
   values.push(req.body.person_lastname);
   values.push(req.body.person_birthdate);
   values.push(req.body.password);
+  postSQLResult(req,res,sqlRequest,values)
+  });
+
+//User delete
+app.post("/deleteUser", function (req,res){
+  var sqlRequest = `Delete from Person WHERE person_id = $1; `;
+  var values = [];
+  values.push(req.body.id);
   postSQLResult(req,res,sqlRequest,values)
   });
 // Must be LAST instruction of the file

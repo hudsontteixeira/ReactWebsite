@@ -4,33 +4,39 @@ import { postServiceData } from "../api/util";
 import {Navigate} from "react-router-dom";
 function User(props) {
     const {userData} = React.useContext(UserContext);
+    const birthDateTrype = new Date(userData.person_birthdate);
+    
     const [dataSaved,setDataSaved] = useState(false);  
-    const [birthdate,setBirthdate] = useState(userData.person_birthdate);
+    const [birthdate,setBirthdate] = useState(`${birthDateTrype.getUTCFullYear()}-${(birthDateTrype.getUTCMonth() + 1)}-${birthDateTrype.getUTCDate()+1}`);
     const [firstName,setFirstName] = useState(userData.person_firstname);
     const [lastName,setLastName] = useState(userData.person_lastname);
     const [pass,setPass] = useState("");
 
-    const birthDateTrype = new Date(userData.person_birthdate);
     const handleSubimit = (e) => {
         e.preventDefault();
         userData.person_id != -1 ? 
             postServiceData("updateUser", {
                 person_firstname: firstName,
                 person_lastname: lastName,
-                person_birthdate: `${birthdate}T00:00:00.000Z`,
+                person_birthdate: `${birthdate}T23:00:00.000`,
                 id: userData.person_id
             })
             .then((data)=>{console.log(data);setDataSaved(data);})
         : postServiceData("createUser", {
             person_firstname: firstName,
             person_lastname: lastName,
-            person_birthdate: `${birthdate}T00:00:00.000Z`,
+            person_birthdate: `${birthdate}T23:00:00.000`,
             password: pass,
         })
         .then((data)=>{console.log("createdUser",data);setDataSaved(data);})
 
     }
+    const token = props.getToken();
+    if(!token){
+        return(<Navigate to="/" />)
+    }
     if(dataSaved.ok === 1){return <Navigate to="/users" />;}
+
     return (
         <>
         <div className="py-3">
@@ -38,7 +44,6 @@ function User(props) {
                 <div className="row">
                     <div className="col-md-12">
                         <h2 >Create / Edit User page</h2>
-                        {JSON.stringify(userData.person_birthdate)}
                     </div>
                 </div>
                 <div className="row">
@@ -69,7 +74,8 @@ function User(props) {
                                             onFocus={(e)=>{e.target.type='date'}}
                                             onBlur={(e)=>{e.target.type='text'}}
                                             onChange={(e)=>{setBirthdate(e.target.value)}}
-                                            placeholder={`${birthDateTrype.getDay()}/${birthDateTrype.getMonth()}/${birthDateTrype.getFullYear()}`} /></td>
+                                            value={birthdate}
+                                            placeholder={`${birthDateTrype.getUTCDate()+1}/${(birthDateTrype.getUTCMonth() + 1)}/${birthDateTrype.getUTCFullYear()}`} /></td>
                                         </tr>
                                        {userData.person_id === -1 && 
                                         <tr>
