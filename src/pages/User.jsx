@@ -1,4 +1,4 @@
-import React,{ useState } from "react";
+import React,{ useState,useEffect } from "react";
 import {UserContext} from '../context/userContext';
 import { postServiceData } from "../api/util";
 import {Navigate} from "react-router-dom";
@@ -7,10 +7,18 @@ function User(props) {
     const birthDateTrype = new Date(userData.person_birthdate);
     
     const [dataSaved,setDataSaved] = useState(false);  
+    const [reload,setReload] = useState(false);  
     const [birthdate,setBirthdate] = useState(`${birthDateTrype.getUTCFullYear()}-${(birthDateTrype.getUTCMonth() + 1)}-${birthDateTrype.getUTCDate()+1}`);
     const [firstName,setFirstName] = useState(userData.person_firstname);
     const [lastName,setLastName] = useState(userData.person_lastname);
+    const [borrows,setBorrows] = useState(null);
+
     const [pass,setPass] = useState("");
+
+    useEffect(()=>{
+        postServiceData("borrow", {id:userData.person_id})
+            .then((data)=>{setBorrows(data)})
+    },[reload])
 
     const handleSubimit = (e) => {
         e.preventDefault();
@@ -49,7 +57,7 @@ function User(props) {
                 <div className="row">
                     <div className="col-md-12">
                         <div className="table-responsive">
-                            <form onSubmit={handleSubimit} method="POST">
+                            <form onSubmit={handleSubimit} >
                                 <table className="table table-striped">
                                     <tbody>
                                         <tr>
@@ -101,7 +109,6 @@ function User(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-md-12 form-group">
-                            <form action="addBook" method="POST">
                                 <div className="table-responsive">
                                     <table className="table table-striped">
                                         <thead>
@@ -112,21 +119,32 @@ function User(props) {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                                <tr>
-                                                    <td scope="col" className="text-center">
-                                                        {"item.borrowDate"}
-                                                    </td>
-                                                    <td>{"item.bookId.bookTitle"}</td>
-                                                    <td className="text-center">
-                                                                <button className="btn" name="return" 
-                                                                        onclick="returnBorrow(this, ${ item.borrowId }); return false;">
-                                                                    <img src="img/return.png" alt="return" className="icon" />
-                                                                </button>
-                                                    </td>
-                                                </tr>
+                                        {borrows && borrows.map((item, i) => {
+                                           let bdate = item.borrow_date.split("T")[0];
+                                           let breturn = item.borrow_return.split("T")[0];
+
+                                            return(
+                                                <tr key={i}>
+                                                <td scope="col" className="text-center">
+                                               <p> {bdate.split("-")[2]}/{bdate.split("-")[1]}/{bdate.split("-")[0]}</p>
+                                                </td>
+                                                <td>{item.book_title}</td>
+                                                <td className="text-center">
+                                                            {item.borrow_return == null ? <button className="btn" name="return" 
+                                                                    onClick={()=>{ 
+                                                                        let currentDate = new Date();
+                                                                        let postdata= `${currentDate.getUTCFullYear()}-${(currentDate.getUTCMonth())}-${currentDate.getUTCDate()+1}` 
+                                                                        console.log("postdata",postdata)
+                                                                        postServiceData("updateBorrow", {id:item.borrow_id,return_date:postdata}).then((e)=>{setReload(((value)=>!value))})}}>
+                                                                <img src="img/return.png" alt="return" className="icon" />
+                                                            </button> : <p>{breturn.split("-")[2]}/{breturn.split("-")[1]}/{breturn.split("-")[0]}</p>}
+                                                </td>
+                                            </tr>
+                                            )
+                                        })}
                                         </tbody>
                                         <tfoot>
-                                        <form action="addBorrow.do" method="POST">
+{/*                                         <form  method="POST">
                                             <tr>
                                                 <td colspan="2">
                                                     <input type="hidden" name="userID" value="${ user.personId }" />
@@ -139,11 +157,10 @@ function User(props) {
                                                     <button className="btn"><img src="img/plus.png" alt="add" className="icon" /></button>
                                                 </td>
                                             </tr>
-                                        </form>
+                                        </form> */}
                                         </tfoot>
                                     </table>
                                 </div>
-                            </form>
                         </div>
                     </div>
                 </div>

@@ -163,6 +163,22 @@ app.post("/deleteBook", function (req,res){
   values.push(req.body.id);
   postSQLResult(req,res,sqlRequest,values)
   });
+//Borrowed books
+app.post("/borrow", function (req,res){
+  var sqlRequest = "SELECT * FROM borrow INNER JOIN book ON (borrow.book_id = book.book_id) WHERE borrow.person_id =$1;";
+  var values = [];
+  values.push(req.body.id);
+  getSQLResult(req,res,sqlRequest,values)
+  });
+
+//Borrowed books update
+app.post("/updateBorrow", function (req,res){
+  var sqlRequest = "UPDATE borrow SET borrow_return = $1 WHERE borrow_id = $2;";
+  var values = [];
+  values.push(req.body.return_date);
+  values.push(req.body.id);
+  postSQLResult(req,res,sqlRequest,values)
+  });
 // Must be LAST instruction of the file
 // Listen to port 8000
 app.listen(8000, () => {
