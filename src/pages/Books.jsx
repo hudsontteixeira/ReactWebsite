@@ -3,7 +3,7 @@ import {Navigate} from "react-router-dom"
 import { postServiceData } from '../api/util';
 import {BooksInList} from "../components/BooksInList";
 import {BookContext} from '../context/bookContext';
-
+import NavBar from "../components/NavBar";
 function Books (props) {
     const [books, setBooks] = useState([]);
     const [wantToEdit, setWantToEdit] = useState(false); 
@@ -26,6 +26,7 @@ function Books (props) {
 
     return (
         <>
+        <NavBar />
             <div className="py-3">
             <div className="container">
                 <div className="row">

@@ -3,6 +3,7 @@ import {Navigate} from "react-router-dom"
 import { postServiceData } from '../api/util';
 import {UsersInList} from "../components/UsersInList";
 import {UserContext} from '../context/userContext';
+import NavBar from "../components/NavBar";
 
 function Users(props) {
     const [users, setUsers] = useState([]);
@@ -27,6 +28,7 @@ function Users(props) {
 
     return (
         <>
+        <NavBar />
         <div class="py-3">
             <div class="container">
                 <div class="row">
