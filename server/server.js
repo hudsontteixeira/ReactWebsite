@@ -179,6 +179,17 @@ app.post("/updateBorrow", function (req,res){
   values.push(req.body.id);
   postSQLResult(req,res,sqlRequest,values)
   });
+
+//Borrowed Add
+app.post("/createBorrow", function (req,res){
+  var sqlRequest = "INSERT INTO public.borrow(person_id, book_id, borrow_date) VALUES ($1, $2, $3);";
+  var values = [];
+  values.push(req.body.id);
+  values.push(req.body.book_id);
+  values.push(req.body.borrow_date);
+
+  postSQLResult(req,res,sqlRequest,values)
+  });
 // Must be LAST instruction of the file
 // Listen to port 8000
 app.listen(8000, () => {

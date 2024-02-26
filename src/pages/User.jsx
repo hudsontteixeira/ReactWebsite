@@ -12,12 +12,17 @@ function User(props) {
     const [firstName,setFirstName] = useState(userData.person_firstname);
     const [lastName,setLastName] = useState(userData.person_lastname);
     const [borrows,setBorrows] = useState(null);
+    const [books, setBooks] = useState([]);
+    const [bookId, setBookId] = useState(null);
+
 
     const [pass,setPass] = useState("");
 
     useEffect(()=>{
         postServiceData("borrow", {id:userData.person_id})
             .then((data)=>{setBorrows(data)})
+        postServiceData("books", {})
+            .then((data)=>{setBooks(data)})
     },[reload])
 
     const handleSubimit = (e) => {
@@ -38,6 +43,18 @@ function User(props) {
         })
         .then((data)=>{console.log("createdUser",data);setDataSaved(data);})
 
+    }
+
+    const addBorrowBook = () =>{
+        console.log("bookId",bookId)
+        let currentDate = new Date();
+        let postdata= `${currentDate.getUTCFullYear()}-${(currentDate.getUTCMonth()+1)}-${currentDate.getUTCDate()}` 
+        postServiceData("createBorrow", {
+            id:userData.person_id,
+            book_id:parseInt(bookId),
+            borrow_date: postdata
+        })
+        .then((data)=>{setReload(((value)=>!value))})
     }
     const token = props.getToken();
     if(!token){
@@ -121,43 +138,42 @@ function User(props) {
                                         <tbody>
                                         {borrows && borrows.map((item, i) => {
                                            let bdate = item.borrow_date.split("T")[0];
-                                           let breturn = item.borrow_return.split("T")[0];
+                                           let breturn = item.borrow_return != null ? item.borrow_return.split("T")[0] : null ;
 
                                             return(
                                                 <tr key={i}>
                                                 <td scope="col" className="text-center">
-                                               <p> {bdate.split("-")[2]}/{bdate.split("-")[1]}/{bdate.split("-")[0]}</p>
+                                               <p> {parseInt(bdate.split("-")[2])+1}/{bdate.split("-")[1]}/{bdate.split("-")[0]}</p>
                                                 </td>
                                                 <td>{item.book_title}</td>
                                                 <td className="text-center">
                                                             {item.borrow_return == null ? <button className="btn" name="return" 
                                                                     onClick={()=>{ 
                                                                         let currentDate = new Date();
-                                                                        let postdata= `${currentDate.getUTCFullYear()}-${(currentDate.getUTCMonth())}-${currentDate.getUTCDate()+1}` 
+                                                                        let postdata= `${currentDate.getUTCFullYear()}-${(currentDate.getUTCMonth()+1)}-${currentDate.getUTCDate()}` 
                                                                         console.log("postdata",postdata)
                                                                         postServiceData("updateBorrow", {id:item.borrow_id,return_date:postdata}).then((e)=>{setReload(((value)=>!value))})}}>
                                                                 <img src="img/return.png" alt="return" className="icon" />
-                                                            </button> : <p>{breturn.split("-")[2]}/{breturn.split("-")[1]}/{breturn.split("-")[0]}</p>}
+                                                            </button> : <p>{parseInt(breturn.split("-")[2])+1}/{breturn.split("-")[1]}/{breturn.split("-")[0]}</p>}
                                                 </td>
                                             </tr>
                                             )
                                         })}
                                         </tbody>
                                         <tfoot>
-{/*                                         <form  method="POST">
                                             <tr>
                                                 <td colspan="2">
-                                                    <input type="hidden" name="userID" value="${ user.personId }" />
-                                                    <select name="bookID" className="form-control form-select form-select-lg mb-3">
+                                                    <select name="bookID" value={bookId} onChange={(e)=>{setBookId(e.target.value)}} className="form-control form-select form-select-lg mb-3">
                                                         <option value="-1" selected="selected">-</option>
-                                                            <option value="${ book.bookId }">{"book.bookTitle"}</option>
+                                                        {books.map((item,i) => { return(
+                                                            <option key={i} value={item.book_id}>{item.book_title}</option>
+                                                        )})}
                                                     </select>
                                                 </td>
                                                 <td  className="text-center">
-                                                    <button className="btn"><img src="img/plus.png" alt="add" className="icon" /></button>
+                                                    <button className="btn"><img src="img/plus.png" alt="add" onClick={()=>{addBorrowBook()}} className="icon" /></button>
                                                 </td>
                                             </tr>
-                                        </form> */}
                                         </tfoot>
                                     </table>
                                 </div>
