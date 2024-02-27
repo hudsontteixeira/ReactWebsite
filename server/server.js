@@ -158,7 +158,7 @@ app.post("/createBook", function (req,res){
 
 //Book delete
 app.post("/deleteBook", function (req,res){
-  var sqlRequest = `Delete from book WHERE person_id = $1; `;
+  var sqlRequest = `Delete from book WHERE book_id = $1; `;
   var values = [];
   values.push(req.body.id);
   postSQLResult(req,res,sqlRequest,values)

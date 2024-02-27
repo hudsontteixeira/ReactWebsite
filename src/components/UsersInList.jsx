@@ -1,11 +1,14 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {UserContext} from '../context/userContext';
 import {postServiceData} from "../api/util";
+import {Navigate} from "react-router-dom"
 export function UsersInList(props) {
     const {userData,setUserData} = React.useContext(UserContext);  
-
+    const [reload, setReload] = useState(false)
     const birthdate = new Date(props.item.person_birthdate);
-
+    if (reload) {
+        return <Navigate push to="/users" />;
+    }
     return (
         <>
             <tr>
@@ -15,7 +18,7 @@ export function UsersInList(props) {
                 <td className="text-center">{birthdate.getUTCDate()+1}/{(birthdate.getUTCMonth() + 1)}/{birthdate.getUTCFullYear()}</td>
                 <td className="text-center">
                         <button name="edit" className="btn" onClick={()=>{setUserData(props.item); props.setWantToEdit(true)}} ><img src="img/edit.png" alt="edit" className="icon" /></button>
-                        <button name="delete" className="btn" onClick={()=>{postServiceData("deleteUser",{id:props.item.person_id})}} ><img src="img/delete.png" alt="delete" class="icon" /></button>
+                        <button name="delete" className="btn" onClick={()=>{postServiceData("deleteUser",{id:props.item.person_id});setReload(true)}} ><img src="img/delete.png" alt="delete" class="icon" /></button>
                 </td>
             </tr>
         </>

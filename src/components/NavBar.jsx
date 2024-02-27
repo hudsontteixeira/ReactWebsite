@@ -5,7 +5,7 @@ export default function NavBar () {
             <>
             <nav className="navbar navbar-expand-md navbar-dark bg-dark">
                 <div className="container">
-                    <div className="collapse navbar-collapse" id="navbar1">
+                    <div className="collapse navbar-collapse" >
                         <ul className="navbar-nav ml-auto">
                             <li className="nav-item"> <a className="nav-link text-white" href="/users" >Users</a></li>
                             <li className="nav-item"> <a className="nav-link text-white" href="/books" >Books</a></li>
