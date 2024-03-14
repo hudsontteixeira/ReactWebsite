@@ -163,11 +163,17 @@ app.post("/deleteBook", function (req,res){
   values.push(req.body.id);
   postSQLResult(req,res,sqlRequest,values)
   });
-//Borrowed books
+//Borrowed books by user
 app.post("/borrow", function (req,res){
   var sqlRequest = "SELECT * FROM borrow INNER JOIN book ON (borrow.book_id = book.book_id) WHERE borrow.person_id =$1;";
   var values = [];
   values.push(req.body.id);
+  getSQLResult(req,res,sqlRequest,values)
+  });
+//Borrowed books
+app.post("/borrows", function (req,res){
+  var sqlRequest = "SELECT * FROM borrow INNER JOIN book ON (borrow.book_id = book.book_id) INNER JOIN person ON (person.person_id = borrow.person_id) WHERE borrow.borrow_return IS NULL;";
+  var values = [];
   getSQLResult(req,res,sqlRequest,values)
   });
 

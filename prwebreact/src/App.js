@@ -5,6 +5,7 @@ import Users from './pages/Users';
 import User from './pages/User';
 import Books from './pages/Books';
 import Book from './pages/Book';
+import Borrows from './pages/Borrows';
 
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import {UserProvider} from './context/userContext'
@@ -33,6 +34,7 @@ function App() {
               <Route path='/user' element={<User getToken={getToken} />}/>
               <Route path='/books' element={<Books getToken={getToken} />}/>
               <Route path='/book' element={<Book getToken={getToken} />}/>
+              <Route path='/borrows' element={<Borrows getToken={getToken} />}/>
             </Routes>
           </Router>
         </BookProvider>

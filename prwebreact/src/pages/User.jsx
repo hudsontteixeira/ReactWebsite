@@ -2,6 +2,7 @@ import React,{ useState,useEffect } from "react";
 import {UserContext} from '../context/userContext';
 import { postServiceData } from "../api/util";
 import {Navigate} from "react-router-dom";
+import  NavBar from "../components/NavBar";
 function User(props) {
     const {userData} = React.useContext(UserContext);
     const birthDateTrype = new Date(userData.person_birthdate);
@@ -64,6 +65,7 @@ function User(props) {
 
     return (
         <>
+        <NavBar/>
         <div className="py-3">
             <div className="container">
                 <div className="row">
