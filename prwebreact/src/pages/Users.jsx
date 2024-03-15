@@ -4,6 +4,7 @@ import { postServiceData } from '../api/util';
 import {UsersInList} from "../components/UsersInList";
 import {UserContext} from '../context/userContext';
 import NavBar from "../components/NavBar";
+import { IoMdPersonAdd } from "react-icons/io";
 
 function Users(props) {
     const [users, setUsers] = useState([]);
@@ -33,11 +34,6 @@ function Users(props) {
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
-                        <h2 class="">List of users</h2>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
                         <div class="table-responsive">
                             <table class="table table-striped">
                                 <thead>
@@ -58,7 +54,7 @@ function Users(props) {
                                     <tr id="addNew">
                                         <td scope="col" colspan="4"></td>
                                         <td class="text-center">
-                                            <button class="btn"><img src="img/plus.png" alt="add" onClick={handleAddUser} class="icon" /></button>
+                                            <button class="btn"><IoMdPersonAdd color="#00888d" alt="add" onClick={handleAddUser} /></button>
                                         </td>
                                     </tr>
                                 </tfoot>

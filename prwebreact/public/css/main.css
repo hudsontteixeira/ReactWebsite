@@ -3,8 +3,8 @@ body {
 }
 
 table {
-	border: 1px solid green;
-	color:forestgreen;
+	border: 1px solid #00888d;
+	color:#00888d;
 	width: 90%;
 }
 
@@ -14,12 +14,12 @@ table {
 
 tr{
 	background-color:white;
-	color:forestgreen;
+	color:#00888d;
 }
 
 td{
-	border:1px solid green;
-	color:forestgreen;
+	border:1px solid #00888d;
+	color:#00888d;
 }
 
 td.centered {
@@ -27,7 +27,7 @@ td.centered {
 }
 
 th{
-	background-color:yellowgreen;
+	background-color:#00888d;
 	color:white;
 }
 
@@ -41,7 +41,7 @@ h1 {
 	margin: 0 0 10px;
 	font-size: 20px;
 	font-weight: bold;
-	color:green;
+	color:#00888d;
 }
 
 p {
@@ -81,9 +81,9 @@ button.large {
 	display: block;
 	width: 100%;
 	padding: 2px auto;
-	background-color: green;
+	background-color: #00888d;
 	color:white;
-	border: 1px solid green;
+	border: 1px solid #00888d;
 	border-radius: 5px;
 	font-size: 14px;
 	cursor: pointer;

@@ -26,31 +26,35 @@ function Login(props) {
     }
     return (
         <>
-            <div>
-                <div className="py-5">
-                    <div className="container">
-                        <div className="row">
-                            <div className="col-md-12">
-                                <h2 className="">Library Login</h2>
+            <div className="d-flex justify-content-center"  style={{backgroundColor: "#00888d", height: "100vh", width:"100%"}}>
+                <div  className="flex-column" style={{marginTop:"10%", width:"30%"}}>
+                    <div className="py-5 bg-white rounded">
+                        <div className="container">
+                            <div className="row">
+                                <div className="col-md-12">
+                                    <h2 style={{textAlign:"center", margin:"30px"}}>Library Login</h2>
+                                </div>
                             </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-md-12">
-                                <form id="c_form-h" action="login.do" method="POST" onSubmit={checkLogin}>
-                                    <div className="form-group row">
-                                        <label for="inputlogin" className="col-2 col-form-label">Login</label>
-                                        <div className="col-10">
-                                            <input onChange={(e)=>{setLogin(e.target.value)}} type="text" className="form-control" id="inputlogin" placeholder="login" name="login" required="required" />
+                            <div className="row justify-content-center">
+                                <div className="col-md-12 justify-content-center ">
+                                    <form id="c_form-h" action="login.do" method="POST" onSubmit={checkLogin}>
+                                        <div className="form-group row justify-content-center">
+                                            <label for="inputlogin" className="col-3 col-form-label">Login</label>
+                                            <div className="col-md-7">
+                                                <input onChange={(e)=>{setLogin(e.target.value)}} type="text" className="form-control" id="inputlogin" placeholder="login" name="login" required="required" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="form-group row">
-                                        <label for="inputpassword" className="col-2 col-form-label">Password</label>
-                                        <div className="col-10">
-                                            <input onChange={(e)=>{setPassword(e.target.value)}} type="password" className="form-control" id="inputpassword" placeholder="Password" name="password" required="required" />
+                                        <div className="form-group row justify-content-center">
+                                            <label for="inputpassword" className="col-3 col-form-label">Password</label>
+                                            <div className="col-7">
+                                                <input onChange={(e)=>{setPassword(e.target.value)}} type="password" className="form-control" id="inputpassword" placeholder="Password" name="password" required="required" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <button type="submit" className="btn btn-success">Submit</button>
-                                </form>
+                                        <div className="row justify-content-center">
+                                        <button type="submit" className="btn btn-success col-md-9" style={{backgroundColor: "#00888d"}}>Submit</button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>

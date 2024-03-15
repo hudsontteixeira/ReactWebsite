@@ -4,6 +4,8 @@ import { postServiceData } from '../api/util';
 import {BooksInList} from "../components/BooksInList";
 import {BookContext} from '../context/bookContext';
 import NavBar from "../components/NavBar";
+import { BiSolidBookAdd } from "react-icons/bi";
+
 function Books (props) {
     const [books, setBooks] = useState([]);
     const [wantToEdit, setWantToEdit] = useState(false); 
@@ -31,11 +33,6 @@ function Books (props) {
             <div className="container">
                 <div className="row">
                     <div className="col-md-12">
-                        <h2 className="">Create / Edit Book page</h2>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-md-12">
                         <div className="table-responsive">
                         <table className="table table-striped">
                             <thead>
@@ -55,7 +52,7 @@ function Books (props) {
                                     <tr id="addNew">
                                         <td scope="col" colspan="3"></td>
                                         <td class="text-center">
-                                            <button class="btn"><img src="img/plus.png" alt="add" onClick={handleAddBook} class="icon" /></button>
+                                            <button class="btn"><BiSolidBookAdd  alt="add" onClick={handleAddBook} color="#00888d" /></button>
                                         </td>
                                     </tr>
                             </tfoot>

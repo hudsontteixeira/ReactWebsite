@@ -25,11 +25,6 @@ function Borrows (props) {
         <NavBar />
             <div className="py-3">
             <div className="container">
-                <div className="row">
-                    <div className="col-md-12">
-                        <h2 className="">Borrows</h2>
-                    </div>
-                </div>
                 <div className="container">
                     <div className="row">
                         <div className="col-md-12 form-group">
@@ -56,7 +51,7 @@ function Borrows (props) {
                                                 </td>
                                                 <td>{item.book_title}</td>
                                                 <td className="text-center">
-                                                            {item.borrow_return == null ? <button className="btn" name="return" 
+                                                            {item.borrow_return == null ? <button className="btn btn-outline-info " name="return" 
                                                                     onClick={()=>{ 
                                                                         let currentDate = new Date();
                                                                         let postdata= `${currentDate.getUTCFullYear()}-${(currentDate.getUTCMonth()+1)}-${currentDate.getUTCDate()}` 

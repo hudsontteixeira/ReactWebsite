@@ -70,11 +70,6 @@ function User(props) {
             <div className="container">
                 <div className="row">
                     <div className="col-md-12">
-                        <h2 >Create / Edit User page</h2>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-md-12">
                         <div className="table-responsive">
                             <form onSubmit={handleSubimit} >
                                 <table className="table table-striped">
@@ -116,7 +111,7 @@ function User(props) {
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <td scope="col" colspan="2" className="text-center"><button type="submit" className="btn btn-block btn-primary">Save</button></td>
+                                            <td scope="col" colspan="2" className="text-center"><button type="submit" className="btn btn-block btn-primary" style={{backgroundColor: "#00888d"}}>Save</button></td>
                                         </tr>
                                     </tfoot>
                                 </table>

@@ -2,6 +2,8 @@ import React,{ useState } from "react";
 import {BookContext} from '../context/bookContext';
 import { postServiceData } from "../api/util";
 import {Navigate} from "react-router-dom";
+import NavBar from "../components/NavBar";
+
 function Book(props) {
     const {bookData} = React.useContext(BookContext);
     
@@ -33,12 +35,10 @@ function Book(props) {
 
     return (
         <>
+        <NavBar />
         <div className="py-3">
             <div className="container">
                 <div className="row">
-                    <div className="col-md-12">
-                        <h2 >Create / Edit Book</h2>
-                    </div>
                 </div>
                 <div className="row">
                     <div className="col-md-12">
@@ -63,7 +63,7 @@ function Book(props) {
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <td scope="col" colspan="2" className="text-center"><button type="submit" className="btn btn-block btn-primary">Save</button></td>
+                                            <td scope="col" colspan="2" className="text-center"><button type="submit" className="btn btn-block btn-primary" style={{backgroundColor: "#00888d"}}>Save</button></td>
                                         </tr>
                                     </tfoot>
                                 </table>
