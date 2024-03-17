@@ -11,16 +11,16 @@ import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import {UserProvider} from './context/userContext'
 import { BookProvider } from './context/bookContext';
 function setToken (userToken){
-  sessionStorage.setItem('token',JSON.stringify(userToken))
+  localStorage.setItem('token',JSON.stringify(userToken))
 }
 function getToken (){
-  const tokenString = sessionStorage.getItem('token');
+  const tokenString = localStorage.getItem('token');
   const userToken = JSON.parse(tokenString);
   return (userToken != null)
 }
 
 function removeToken(){
-  sessionStorage.removeItem('token')
+  localStorage.removeItem('token')
 }
 function App() {
   return (
