@@ -42,7 +42,7 @@ function getSQLResult(req,res,sqlRequest,values){
   })
 }
 //Auth Website
-app.get("/authenticate", function (req,res){
+/* app.get("/authenticate", function (req,res){
   var login = req.query.login;
   var passwd = req.query.passwd;
   var jsonString;
@@ -53,7 +53,7 @@ app.get("/authenticate", function (req,res){
   }
   res.setHeader('Content-Type', 'application/json');
   res.send(jsonString);
-})
+}) */
 function postSQLResult(req,res,sqlRequest,values){
   var client = new pg.Client(conString);
   client.connect(function(err){
@@ -82,15 +82,42 @@ function postSQLResult(req,res,sqlRequest,values){
 
 app.post("/authenticate", function (req,res){
   var login = req.body.login;
+  var values = [];
+  values.push(login);
   var passwd = req.body.passwd;
+  var sqlRequest = "SELECT * FROM Person WHERE person_firstname = $1;";
   var jsonString;
-  if((login === "admin")&&(passwd === "admin")){
-      jsonString = JSON.stringify({ok:1})
-  } else{
-    jsonString = JSON.stringify({ok:0})
-  }
-  res.setHeader('Content-Type', 'application/json');
-  res.send(jsonString);
+  var client = new pg.Client(conString);
+  client.connect(function(err){
+    if(err){
+      //failled to connect
+      console.log("Failled to connect to postgres");
+      res.status(500).end('Database Connection Error!'); 
+    } else{
+      //sucssesfuly connected
+      client.query(sqlRequest,values, function(err,result){
+        if(err){
+          //bad Request
+          console.log("Bad request", err);
+          res.status(500).end('Bad Request Error!');  
+        } else{
+          var results = [];
+          for (let index in result.rows) {
+            results.push(result.rows[index]);
+          }
+          //Convert to JSON
+          if((results[0].password === passwd)){
+              jsonString = JSON.stringify({ok:1})
+          } else{
+            jsonString = JSON.stringify({ok:0})
+          }
+          res.setHeader('Content-Type', 'application/json');
+          res.send(jsonString);
+        }
+        client.end();
+      })
+    }
+  })
 })
 
 //Users List

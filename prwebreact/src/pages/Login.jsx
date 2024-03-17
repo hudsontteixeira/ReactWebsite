@@ -5,6 +5,7 @@ function Login(props) {
     const [canLogin, setCanLogin] = useState(false);
     const [login, setLogin] = useState("");
     const [password, setPassword] = useState("");
+    const [wrong, setWrong] = useState(false);
     function handleSubmit(e) {
         e.preventDefault();
         setCanLogin(true)
@@ -17,6 +18,8 @@ function Login(props) {
         postServiceData("authenticate",paramBody).then((data)=>{
             if(data.ok === 1){
                 setCanLogin(true)
+            } else {
+                setWrong(true)
             }
         })
     }
@@ -32,7 +35,7 @@ function Login(props) {
                         <div className="container">
                             <div className="row">
                                 <div className="col-md-12">
-                                    <h2 style={{textAlign:"center", margin:"30px"}}>Library Login</h2>
+                                    <img src="./logo.png" class="rounded mx-auto d-block mb-4" alt="logo"/>
                                 </div>
                             </div>
                             <div className="row justify-content-center">
@@ -50,6 +53,10 @@ function Login(props) {
                                                 <input onChange={(e)=>{setPassword(e.target.value)}} type="password" className="form-control" id="inputpassword" placeholder="Password" name="password" required="required" />
                                             </div>
                                         </div>
+                                        {wrong&&                                        
+                                        <div className="row justify-content-center alert alert-danger">
+                                            <p>Looks like your firstname or password is wrong</p>
+                                        </div>}
                                         <div className="row justify-content-center">
                                         <button type="submit" className="btn btn-success col-md-9" style={{backgroundColor: "#00888d"}}>Submit</button>
                                         </div>
