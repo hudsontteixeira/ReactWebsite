@@ -1,15 +1,15 @@
 import React,{ useState,useEffect } from "react";
 import {UserContext} from '../context/userContext';
-import { postServiceData } from "../api/util";
+import { postServiceData,stringToDate } from "../api/util";
 import {Navigate} from "react-router-dom";
 import  NavBar from "../components/NavBar";
 function User(props) {
     const {userData} = React.useContext(UserContext);
-    const birthDateTrype = new Date(userData.person_birthdate);
+    const birthDateTrype = stringToDate(userData.person_birthdate);
     
     const [dataSaved,setDataSaved] = useState(false);  
     const [reload,setReload] = useState(false);  
-    const [birthdate,setBirthdate] = useState(`${birthDateTrype.getUTCFullYear()}-${(birthDateTrype.getUTCMonth() + 1)}-${birthDateTrype.getUTCDate()+1}`);
+    const [birthdate,setBirthdate] = useState(`${birthDateTrype}`);
     const [firstName,setFirstName] = useState(userData.person_firstname);
     const [lastName,setLastName] = useState(userData.person_lastname);
     const [borrows,setBorrows] = useState(null);
@@ -97,7 +97,7 @@ function User(props) {
                                             onBlur={(e)=>{e.target.type='text'}}
                                             onChange={(e)=>{setBirthdate(e.target.value)}}
                                             value={birthdate}
-                                            placeholder={`${birthDateTrype.getUTCDate()+1}/${(birthDateTrype.getUTCMonth() + 1)}/${birthDateTrype.getUTCFullYear()}`} /></td>
+                                            placeholder={`${birthDateTrype}`} /></td>
                                         </tr>
                                        {userData.person_id === -1 && 
                                         <tr>
@@ -134,13 +134,13 @@ function User(props) {
                                         </thead>
                                         <tbody>
                                         {borrows && borrows.map((item, i) => {
-                                           let bdate = item.borrow_date.split("T")[0];
-                                           let breturn = item.borrow_return != null ? item.borrow_return.split("T")[0] : null ;
+                                           let bdate = stringToDate(item.borrow_date);
+                                           let breturn = item.borrow_return != null ? stringToDate(item.borrow_return) : null ;
 
                                             return(
                                                 <tr key={i}>
                                                 <td scope="col" className="text-center">
-                                               <p> {parseInt(bdate.split("-")[2])+1}/{bdate.split("-")[1]}/{bdate.split("-")[0]}</p>
+                                               <p> {bdate}</p>
                                                 </td>
                                                 <td>{item.book_title}</td>
                                                 <td className="text-center">
@@ -151,7 +151,7 @@ function User(props) {
                                                                         console.log("postdata",postdata)
                                                                         postServiceData("updateBorrow", {id:item.borrow_id,return_date:postdata}).then((e)=>{setReload(((value)=>!value))})}}>
                                                                 <img src="img/return.png" alt="return" className="icon" />
-                                                            </button> : <p>{parseInt(breturn.split("-")[2])+1}/{breturn.split("-")[1]}/{breturn.split("-")[0]}</p>}
+                                                            </button> : <p>{breturn}</p>}
                                                 </td>
                                             </tr>
                                             )
