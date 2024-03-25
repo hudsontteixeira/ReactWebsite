@@ -44,7 +44,7 @@ function Books (props) {
                                     </tr>
                             </thead> 
                             <tbody>
-                            {books.map((item,i) => (
+                            {books.sort((a, b) => a.book_id - b.book_id).map((item,i) => (
                                 <BooksInList item={item} setWantToEdit={setWantToEdit} key={i}  />
                             ))}
                             </tbody>

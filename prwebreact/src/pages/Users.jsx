@@ -46,9 +46,9 @@ function Users(props) {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {users.map((item) => (
-                                        <UsersInList item={item} setWantToEdit={setWantToEdit} key={item.personId}  />
-                                    ))}
+                                {users.sort((a, b) => a.person_id - b.person_id).map((item) => (
+                                    <UsersInList item={item} setWantToEdit={setWantToEdit} key={item.personId} />
+                                ))}
                                 </tbody>
                                 <tfoot>
                                     <tr id="addNew">

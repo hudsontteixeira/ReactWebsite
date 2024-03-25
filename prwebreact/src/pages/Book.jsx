@@ -1,6 +1,6 @@
-import React,{ useState } from "react";
+import React,{ useState, useEffect } from "react";
 import {BookContext} from '../context/bookContext';
-import { postServiceData } from "../api/util";
+import { postServiceData,stringToDate } from "../api/util";
 import {Navigate} from "react-router-dom";
 import NavBar from "../components/NavBar";
 
@@ -10,6 +10,8 @@ function Book(props) {
     const [dataSaved,setDataSaved] = useState();  
     const [title,setTitle] = useState(bookData.book_title);
     const [authors,setAuthors] = useState(bookData.book_authors);
+    const [borrows,setBorrows] = useState(null);
+    const [reload,setReload] = useState(null);
 
     const handleSubimit = (e) => {
         e.preventDefault();
@@ -28,6 +30,11 @@ function Book(props) {
 
     }
     const token = props.getToken();
+    useEffect(()=>{
+        postServiceData("borrows", {})
+            .then((data)=>{setBorrows(data)})
+    },[reload])
+
     if(!token){
         return(<Navigate to="/" />)
     }
@@ -68,6 +75,46 @@ function Book(props) {
                                     </tfoot>
                                 </table>
                             </form>
+                            <div className="table-responsive">
+                                    <table className="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Nom Prenom</th>
+                                                <th scope="col">Date</th>
+                                                <th scope="col">Title</th>
+                                                <th scope="col">Return</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        {bookData.book_id && borrows && borrows.sort((a, b) => new Date(stringToDate(a.borrow_date)) - new Date(stringToDate(b.borrow_date))).map((item, i) => {
+                                            
+                                           let bdate = stringToDate(item.borrow_date);
+                                           let breturn = item.borrow_return != null ? stringToDate(item.borrow_return) : null ;
+                                           if(item.book_id == bookData.book_id){
+                                                return(
+                                                    <tr key={i}>
+                                                    <td>{item.person_lastname} {item.person_firstname}</td>
+                                                    <td scope="col" className="text-center">
+                                                <p> {bdate}</p>
+                                                    </td>
+                                                    <td>{item.book_title}</td>
+                                                    <td className="text-center">
+                                                                {item.borrow_return == null ? <button className="btn btn-outline-info " name="return" 
+                                                                        onClick={()=>{ 
+                                                                            let currentDate = new Date();
+                                                                            let postdata= `${currentDate.getUTCFullYear()}-${(currentDate.getUTCMonth()+1)}-${currentDate.getUTCDate()}` 
+                                                                            console.log("postdata",postdata)
+                                                                            postServiceData("updateBorrow", {id:item.borrow_id,return_date:postdata}).then((e)=>{setReload(((value)=>!value))})}}>
+                                                                    <img src="img/return.png" alt="return" className="icon" />
+                                                                </button> : <p>{breturn}</p>}
+                                                    </td>
+                                                </tr>
+                                                )
+                                            }
+                                        })}
+                                        </tbody>
+                                    </table>
+                                </div>
                         </div>
                     </div>
                 </div>
